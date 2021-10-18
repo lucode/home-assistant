@@ -1,9 +1,9 @@
 My Home-Assistant Setup 🚀️
 ============================
 
-This Home Assistant configuration files are used mostly to control my energy mangament system.
-If you are interested in those topics it would most sense if you have a PV installation which you can control via HA and/or
-an Electric Vehicle, with a controllable plug.
+This Home Assistant configuration files are used mostly to control my energy management system.
+If you are interested in these topics, it would make most sense if you have a PV system that you can control via HA and/or an electric vehicle, with a controllable plug.
+
 In my case I use or have connected the following hardware connected to HA.
 
 Heating: Mitsubishi Ecodan Heat pump with Z-Wave thermostats
@@ -25,9 +25,7 @@ More Infos: [See more](docs/victron-pv-soc-control.md)
 Smart EV Charging: Plug with contactor controlled over Z-Wave
 -------------------------------------------------------------
 
-plus Shelly EM (Energy Meter) for power consumption tracking. The system allows to track a virtual State of Charge
-
-of the car battery and so an optimal charge management.
+plus Shelly EM (Energy Meter) for power consumption tracking. The system allows to track a virtual State of Charge of the car battery and so an optimal charge management.
 
 ![image.png](./assets/1634569192981-image.png)
 
@@ -35,6 +33,8 @@ More Infos: [See more](docs/smart-ev-charging.md)
 
 Ventilation: Controlled over Z-Wave relais
 ------------------------------------------
+
+tbd
 
 ## Used Software Components
 
@@ -58,4 +58,4 @@ DISCLAIMER
 ----------
 
 ***This setup  can be used in your projects by you own risk. Or you can just take some inspiration from it.
-The Node-Red automations (flows) are relative complex and all this is still a work in progress and my have still some edges and bugs.***
+The Node-Red automations (flows) are relative complex and all this is still a work in progress and may have still some edges and bugs.***
