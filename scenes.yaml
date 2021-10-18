@@ -1,0 +1,52 @@
+- id: '1611238780734'
+  name: Sal de Bain
+  entities:
+    climate.tstat_sal_de_bain_mode:
+      hvac_modes:
+      - 'off'
+      - heat
+      min_temp: 7
+      max_temp: 35
+      preset_modes:
+      - none
+      - Heat Eco
+      - Full Power
+      - Manufacturer Specific
+      current_temperature: 20.8
+      temperature: 18
+      preset_mode: none
+      node_id: 2
+      valve_position: 0 %
+      friendly_name: 'Tstat Sal de Bain: Mode'
+      supported_features: 17
+      state: heat
+- id: '1611582589032'
+  name: Set Temperature in Office
+  entities:
+    climate.tstat_bureau_temp:
+      hvac_modes:
+      - 'off'
+      - heat
+      min_temp: 7
+      max_temp: 35
+      preset_modes:
+      - none
+      - Heat Eco
+      - Full Power
+      - Manufacturer Specific
+      current_temperature: 12.9
+      preset_mode: none
+      node_id: 3
+      valve_position: 12 %
+      friendly_name: Tstat Bureau
+      supported_features: 16
+      state: 'off'
+    input_boolean.bureau_occupe:
+      editable: true
+      friendly_name: Bureau occupé
+      icon: mdi:human-male
+      state: 'off'
+- id: '1614075342316'
+  name: VMC High Ventilation
+  entities: {}
+  icon: hass:fan

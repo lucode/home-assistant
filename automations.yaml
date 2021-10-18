@@ -1,0 +1,172 @@
+- id: Turn_Off_SR_Fan_1_Sw
+  alias: VMC Toggle Ventilation Low Switch
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.vmc_scheduler_state_low
+    to: 'on'
+    for: 0:00:01
+    from: 'off'
+  action:
+  - service: fan.set_preset_mode
+    data:
+      preset_mode: low
+    target:
+      entity_id: fan.mvc_ventilation_fan
+  - type: turn_on
+    device_id: 5a1b1f14fefb0eb169dfc440bf721eb8
+    entity_id: switch.binary_power_switch_switch
+    domain: switch
+  initial_state: 'on'
+  mode: single
+- id: Turn_Off_SR_Fan_3_Sw
+  alias: VMC Toggle Ventilation High Switch
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.vmc_scheduler_state_high_speed
+    from: 'off'
+    to: 'on'
+  action:
+  - service: fan.set_preset_mode
+    data:
+      preset_mode: high
+    target:
+      entity_id: fan.mvc_ventilation_fan
+  - type: turn_on
+    device_id: 5a1b1f14fefb0eb169dfc440bf721eb8
+    entity_id: switch.binary_power_switch_switch
+    domain: switch
+  initial_state: 'on'
+  mode: single
+- id: Turn_Off_SR_Fan_0_Sw
+  alias: VMC Toggle Ventilation Off Switch
+  description: '- id: Turn_Off_SR_Fan_0_Sw'
+  trigger:
+  - platform: state
+    to: 'off'
+    for: 0:00:00
+    entity_id: input_boolean.vmc_scheduler_state_high_speed
+    from: 'on'
+  - platform: state
+    to: 'off'
+    for: 0:00:00
+    entity_id: input_boolean.vmc_scheduler_state_low
+    from: 'on'
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: input_boolean.vmc_scheduler_state_high_speed
+      state: 'off'
+    - condition: state
+      entity_id: input_boolean.vmc_scheduler_state_low
+      state: 'off'
+  action:
+  - service: fan.set_preset_mode
+    data:
+      preset_mode: 'off'
+    target:
+      entity_id: fan.mvc_ventilation_fan
+  - type: turn_off
+    device_id: 5a1b1f14fefb0eb169dfc440bf721eb8
+    entity_id: switch.binary_power_switch_switch
+    domain: switch
+  initial_state: 'on'
+  mode: single
+- id: '1614075249640'
+  alias: Fibaro Test Double click
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zwave.scene_activated
+    event_data:
+      entity_id: switch.double_switch_corr_vmc
+      node_id: 10
+      scene_data: 0
+      scene_id: 2
+  condition: []
+  action:
+  - scene: scene.vmc_high_ventilation
+  - condition: state
+    entity_id: input_boolean.vmc_ventilation_mode_high
+    state: 'on'
+    for: '10'
+  mode: single
+- id: '1614077768708'
+  alias: Victron Modbus Write min SOC manual
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_number.multiplus_minimal_soc_setpoint
+  condition: []
+  action:
+  - service: modbus.write_register
+    data:
+      hub: victron
+      unit: 100
+      address: 2901
+      value: '{{ states.sensor.multiplus_minimal_soc_set_setpoint.state|int }}'
+  mode: single
+- id: '1614099931829'
+  alias: Mobile Androis Tablet Lucas low Battery
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.tablet_lucas_sm_t813_akkufullstand
+    from: '31'
+    to: '29'
+    for: '1'
+  condition: []
+  action:
+  - service: notify.mobile_app_sm_t813
+    data:
+      title: Tablet Lucas Akku laden
+      message: Der Akku hat ein niedrigen Füllstanf von 30% erricht!
+  mode: single
+- id: '1614620021625'
+  alias: Victron. Inverter High Load
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.ac_consumption_l1
+    to: '5000'
+    for: '5.0'
+  - platform: state
+    entity_id: sensor.multiplus_grid_power
+    to: '9000'
+    for: '3.0'
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    entity_id: input_boolean.victron_inverter_high_current
+  mode: single
+- id: '1629900286882'
+  alias: Utility meter set Tariff Low
+  description: ''
+  trigger:
+  - platform: time
+    at: '21:00'
+  condition: []
+  action:
+  - service: utility_meter.select_tariff
+    target:
+      entity_id: utility_meter.monthly_el_energy
+    data:
+      tariff: low
+  mode: single
+- id: '1629900337364'
+  alias: Utility meter set Tariff High
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:00
+  condition: []
+  action:
+  - service: utility_meter.select_tariff
+    target:
+      entity_id: utility_meter.monthly_el_energy
+    data:
+      tariff: high
+  mode: single

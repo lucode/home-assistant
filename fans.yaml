@@ -1,0 +1,20 @@
+# Fan Template MVC
+- platform: template
+  fans:
+      vmc_ventilation_fan:
+        friendly_name: "VMC Ventilation Fan"
+        value_template: "{{ states('input_boolean.vmc_fan_state') }}"
+        preset_mode_template: "{{ states('input_select.vmc_preset_mode') }}"
+        turn_on:
+          service: script.vmc_fan_on
+        turn_off:
+          service: script.vmc_fan_off
+        set_preset_mode:
+          service: script.vmc_set_preset_mode
+          data:
+            preset_mode: "{{ preset_mode }}"
+        speed_count: 3
+        preset_modes:
+          - off
+          - low
+          - high

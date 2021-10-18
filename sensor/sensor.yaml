@@ -1,0 +1,54 @@
+# Time/Date entry
+- platform: time_date
+  display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
+      - 'date_time_utc'
+      - 'date_time_iso'
+      - 'time_date'
+      - 'time_utc'
+      - 'beat'
+      
+#  pushbullet messaging
+- platform: pushbullet
+  api_key: o.oJDS3j4z6iZh1zfvbRNAlrXZz70BGasI
+  monitored_conditions:
+       - body 
+
+  
+# Template next weather condition
+- platform: template
+  sensors:
+    next_day_weather_condition:
+      friendly_name: "Weather condition tomorrow"
+      value_template: >-
+        {{ state_attr('weather.le_vernet_hassio', 'forecast')[0].condition }}
+
+- platform: template
+  sensors:
+    weather_temperature_le_vernet:
+      friendly_name: 'Weather Temperature'
+      value_template: "{{ state_attr('weather.le_vernet', 'temperature') }}"
+      unit_of_measurement: "°C"
+      
+    vmc_temperature_deviation:
+      friendly_name: 'Weather temp deviation from 20°C'
+      value_template: >-
+        {% set temp = state_attr('weather.le_vernet', 'temperature') | float %}
+        {% if temp | float > 20.0 %}
+           {{ temp | float - 20.0 | float }}
+        {%- else -%}
+           {{ 20.0 | float - temp | float }}
+        {%- endif %}
+      unit_of_measurement: "°C"
+
+    electric_utility_tarrifs:
+      friendly_name: "Electric Tariff Prices"
+      unit_of_measurement: EUR
+      value_template: >-
+            {% if is_state('utility_meter.monthly_el_energy', 'low') %}
+                {{ 0.08589 }}
+            {% elif is_state('utility_meter.monthly_el_energy', 'high') %}
+                {{ 0.12243 }}
+            {% endif %}   

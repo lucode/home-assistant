@@ -1,0 +1,61 @@
+vmc_fan_off:
+  alias: VMC Ventilation Off
+  sequence:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.vmc_fan_state
+  - service: input_select.select_option
+    data:
+      option: 'off'
+    target:
+      entity_id: input_select.vmc_preset_mode
+  mode: single
+  icon: hass:fan
+vmc_fan_on:
+  alias: VMC Ventilation On
+  sequence:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.vmc_fan_state
+  mode: single
+  icon: hass:fan
+vmc_set_preset_mode:
+  alias: VMC Fan Ventilation Set preset
+  sequence:
+  - service: fan.set_preset_mode
+    data:
+      preset_mode: low
+    target:
+      entity_id: fan.vmc_ventilation_fan
+  mode: single
+  icon: hass:fan
+cabinet_load_discharge_mode_off:
+  alias: Cabinet Load Discharge mode Off
+  sequence:
+  - service: input_select.select_option
+    data:
+      entity_id: input_select.load_discharge
+      option: 'off'
+  mode: single
+ev_charger_store_daily_energy_yesterday:
+  alias: 'EV Charger Store Daily Energy yesterday '
+  sequence:
+  - service: variable.set_variable
+    data:
+      variable: ev_battery_plug_energy_state_yesterday
+      value: '{{states.variable.ev_battery_plug_energy_state_today.state}}
+
+        '
+  mode: single
+'1633965939939':
+  alias: EV Charger Store Daily Energy today
+  sequence:
+  - service: variable.set_variable
+    data:
+      variable: ev_battery_plug_energy_state_today
+      value: '{{states.sensor.shelly_em_channel_1_energy.state}}
+
+        '
+  mode: single

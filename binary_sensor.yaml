@@ -1,0 +1,17 @@
+#### Binary sensors EV Charging ########
+- platform: template
+  sensors:
+    # True if power is over 2000W
+    ev_charging_onoff_2kw:
+      friendly_name: 'EV is Charging with 2 kW'
+      value_template: "{{((states.sensor.sensor.shelly_em_channel_1_power|float(0)) < 2) and ((states.sensor.sensor.shelly_em_channel_1_power|float(0)) > 2000)}}"
+      device_class: battery_charging
+
+    # True if power is over 3000W
+    ev_charging_onoff_3_5kw:
+      friendly_name: 'EV is Charging with 3.5 kW'
+      entity_id:
+        - sensor.shelly_em_channel_1_power
+      value_template: "{{states.sensor.sensor.shelly_em_channel_1_power.state > 3000}}"
+
+

@@ -1,0 +1,29 @@
+# variable Template Victron
+victron_solar_yield_yest:
+    value: 0
+    attributes:
+      friendly_name: 'Victron solar yield yesterday'
+      icon: mdi:sun
+      unit_of_measurement: "kWh"
+      
+ev_battery_plug_energy_state_yesterday:
+    value: 0
+    attributes:
+      friendly_name: 'EV Battery plug Energy State Yesterday'
+      icon: hass:battery
+      unit_of_measurement: "kWh"
+    restore: true
+ev_battery_plug_energy_state_today:
+    value: 0
+    attributes:
+      friendly_name: 'EV Battery plug Energy State Today'
+      icon: hass:battery
+      unit_of_measurement: "kWh"
+    restore: true
+ev_battery_plug_energy_yesterday_and_night:
+    value: 0
+    attributes:
+      friendly_name: 'EV Battery plug Energy Charged'
+      icon: hass:battery
+      unit_of_measurement: "kWh"
+    restore: true

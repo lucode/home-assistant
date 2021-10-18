@@ -1,0 +1,207 @@
+# Templates Modbus calc
+- platform: template
+  sensors:
+    multiplus_ac_loads:
+      friendly_name: 'Multiplus AC loads'
+      value_template: >-
+          {% if ((states('sensor.ac_consumption_l1') | int  - states('sensor.multiplus_critical_loads') | float)  <= 0) %}
+            0
+          {% else %}
+            {{(states('sensor.ac_consumption_l1') | int + 115 - states('sensor.multiplus_critical_loads') | float)}}
+          {% endif %}
+      unit_of_measurement: "W"
+      device_class: power
+      
+    multiplus_minimal_soc_set_setpoint:
+      friendly_name: 'Multiplus Minimal SOC setpoint scaled'
+      value_template: "{{ states('input_number.multiplus_minimal_soc_setpoint') | int * 10 | int }}"
+      unit_of_measurement: "%"
+
+    multiplus_power_from_grid:
+      friendly_name: 'Multiplus Power from Grid'
+      value_template: >-
+          {% if ((states('sensor.multiplus_grid_power') | float)  <= 0) %}
+            0
+          {% else %}
+            {{(states('sensor.multiplus_grid_power') | float)}}
+          {% endif %}
+      unit_of_measurement: "W"
+      device_class: power
+      
+    multiplus_power_to_grid:
+      friendly_name: 'Multiplus Power to Grid'
+      value_template: >-
+          {% if ((states('sensor.multiplus_grid_power') | float)  > 0) %}
+            0
+          {% else %}
+            {{(states('sensor.multiplus_grid_power') | float - states('sensor.multiplus_grid_power') | float - states('sensor.multiplus_grid_power') | float )}}
+          {% endif %}
+      unit_of_measurement: "W"
+      device_class: power
+      
+    multiplus_power_from_battery:
+      friendly_name: 'Multiplus Power from battery'
+      value_template: >-
+          {% if ((states('sensor.battery_power_system') | float)  <= 0) %}
+            0
+          {% else %}
+            {{(states('sensor.battery_power_system') | float)}}
+          {% endif %}
+      unit_of_measurement: "W"
+      device_class: power
+      
+    multiplus_power_to_battery:
+      friendly_name: 'Multiplus Power to Battery'
+      value_template: >-
+          {% if ((states('sensor.battery_power_system') | float)  > 0) %}
+            0
+          {% else %}
+            {{(states('sensor.battery_power_system') | float - states('sensor.battery_power_system') | float - states('sensor.battery_power_system') | float )}}
+          {% endif %}
+      unit_of_measurement: "W"
+      device_class: power
+
+#Sates/  Alarms to text
+    multiplus_inverter_state:
+      friendly_name: 'Multi Inverter State'
+      value_template: >-
+        {% if ((states('sensor.multi_inverter_state') | int) == 0) %}
+           Off
+        {% elif ((states('sensor.multi_inverter_state') | int) == 1) %}
+           Low Power
+        {% elif ((states('sensor.multi_inverter_state') | int) == 2) %}
+           Fault
+        {% elif ((states('sensor.multi_inverter_state') | int) == 3) %}
+           Bulk
+        {% elif ((states('sensor.multi_inverter_state') | int) == 4) %}
+           Absorption
+        {% elif ((states('sensor.multi_inverter_state') | int) == 5) %}
+           Float
+        {% elif ((states('sensor.multi_inverter_state') | int) == 6) %}
+           Storage
+        {% elif ((states('sensor.multi_inverter_state') | int) == 7) %}
+           Equalize           
+        {% else %}
+           Passtrough, Bulk protection etc
+        {% endif %}
+      # Inverter States, 0=Off;1=Low Power;2=Fault;3=Bulk;4=Absorption;5=Float;6=Storage;7=Equalize;8=Passthru;9=Inverting;10=Power assist;11=Power supply;252=Bulk protection   
+
+    multiplus_boiler_heating:
+      friendly_name: 'Boiler El. Heating'
+      value_template: >-
+        {% if ((states('switch.binary_power_switch_cabinet_s1_plug_carport') | int) == 0) %}
+           Heat
+        {% else %}
+           Off
+        {% endif %}
+        
+    multiplus_overload_alarm:
+      friendly_name: 'Multi Overload Alarm'
+      value_template: >-
+        {% if ((states('sensor.multi_overload_alarm') | int) == 0) %}
+           Ok
+        {% elif ((states('sensor.multi_overload_alarm') | int) == 1) %}
+           Warning
+        {% else %}
+           Alarm
+        {% endif %}
+    multiplus_temperature_alarm:
+      friendly_name: 'Multi Temperature Alarm'
+      value_template: >-
+        {% if ((states('sensor.multi_temperature_alarm') | int) == 0) %}
+           Ok
+        {% elif ((states('sensor.multi_temperature_alarm') | int) == 1) %}
+           Warning
+        {% else %}
+           Alarm
+        {% endif %}
+
+    multiplus_grid_lost_alarm:
+      friendly_name: 'Multi Grid lost'
+      value_template: >-
+        {% if ((states('sensor.grid_lost_alarm') | int) == 0) %}
+           Ok
+        {% elif ((states('sensor.grid_lost_alarm') | int) == 1) %}
+           Warning
+        {% else %}
+           Alarm
+        {% endif %}
+        
+# Statistics for Battery SOC (min / max 24h)
+- platform: statistics
+  entity_id: sensor.battery_state_of_charge
+  max_age:
+    minutes: 1440
+  sampling_size: 1440
+  precision: 0
+  name: 'Battery SOC stats'
+
+# Statistics for Energy Dashboard kWh
+- platform: integration
+  source: sensor.multiplus_power_from_grid
+  name: "Multiplus Energy from Grid"
+  unit_prefix: k
+#  unit_time: d
+  round: 2
+  
+- platform: integration
+  source: sensor.multiplus_power_to_grid
+  name: "Multiplus Energy to Grid"
+  unit_prefix: k
+#  unit_time: d
+  round: 2
+
+- platform: integration
+  source: sensor.multiplus_power_from_battery
+  name: "Multiplus Energy from Battery"
+  unit_prefix: k
+  round: 2
+  
+- platform: integration
+  source: sensor.multiplus_power_to_battery
+  name: "Multiplus Energy to Battery"
+  unit_prefix: k
+  round: 2
+  
+- platform: integration
+  source: sensor.ac_consumption_l1
+  name: "Multiplus Total Energy"
+  unit_prefix: k
+#  unit_time: d
+  round: 2
+
+- platform: integration
+  source: sensor.shelly_em_victron_ac_loads
+  name: "AC Loads, Oven / Microwave / Dryer etc."
+  unit_prefix: k
+#  unit_time: d
+  round: 2
+
+- platform: integration
+  source: sensor.multiplus_critical_loads
+  name: "Multiplus Critical Energy"
+  unit_prefix: k
+#  unit_time: d
+  round: 2
+  
+- platform: integration
+  source: sensor.multiplus_ac_loads
+  name: "Multiplus AC Energy"
+  unit_prefix: k
+#  unit_time: d
+  round: 2
+  
+- platform: integration
+  source: sensor.multiplus_solar_power
+  name: "Solar Energy Yield"
+  unit_prefix: k
+#  unit_time: d
+  round: 2  
+  
+- platform: integration
+  source: sensor.battery_energy_kwh
+  name: "Victron Battery Energy"
+  unit_prefix: k
+#  unit_time: d
+  round: 2
+ 

@@ -1,0 +1,172 @@
+# cat modbus.yaml
+# configuration entry for a TCP connection
+# system :
+ -  name: victron
+    retry_on_empty: true
+    retries: 10
+    type: tcp
+    host: 192.168.1.7
+    port: 502
+    sensors:
+    - name: 'AC Consumption L1'
+      unit_of_measurement: "W"
+      slave: 100
+      address: 817
+      scan_interval: 2
+      device_class: power
+      
+    - name: 'Multiplus Grid power'
+      unit_of_measurement: "W"
+      slave: 100
+      address: 820
+      scan_interval: 2
+      device_class: power
+      
+    - name: 'Multiplus Solar power'
+      unit_of_measurement: "W"
+      slave: 100
+      address: 850
+      device_class: power
+      
+    - name: 'ESS Minimum SoC setpoint'
+      unit_of_measurement: "%"
+      data_type: uint
+      slave: 100
+      address: 2901
+      scan_interval: 3
+      scale: 0.1
+      
+    - name: 'Maximum System Grid Feed In'
+      unit_of_measurement: "W"
+      data_type: int
+      slave: 100
+      address: 2700
+      device_class: power
+      # command_on: 4000
+      # command_off: 40
+      # verify_state: false
+#Battery 
+    - name: 'Battery current'
+      unit_of_measurement: "A DC"
+      slave: 100
+      address: 841
+      scale: 0.1
+      precision: 0
+      device_class: current
+      
+    - name: 'Battery Power System'
+      unit_of_measurement: "W"
+      slave: 100
+      address: 842
+      scale: 1.0
+      precision: 0
+      device_class: power
+
+    - name: 'Charge Power System'
+      unit_of_measurement: "W"
+      slave: 100
+      address: 860
+      scale: 10.0
+      precision: 0
+      device_class: power
+      
+    - name: 'Battery State of Charge System'
+      unit_of_measurement: "%"
+      slave: 100
+      address: 843
+      scale: 1
+      precision: 0
+
+      
+# Victron device over Modbus: Pylontch Battery slave: 225
+    - name: 'Battery current Pylon'
+      unit_of_measurement: "A DC"
+      slave: 225
+      address: 261
+      scale: 0.1
+      precision: 0
+      device_class: current
+      
+    - name: 'Battery State of Charge'
+      unit_of_measurement: "%"
+      slave: 225
+      address: 266
+      scale: 0.1
+      precision: 0
+
+
+# Victron device over Modbus: vebus
+    - name: 'Multiplus Critical Loads'
+      unit_of_measurement: "W"
+      slave: 246
+      address: 23
+      scan_interval: 2
+      scale: 10.0
+      precision: 0
+      device_class: power
+      
+    - name: 'Grid Voltage L1 in'
+      unit_of_measurement: "V AC"
+      slave: 246
+      address: 3
+      scale: 0.1
+      offset: 0
+      precision: 2
+      device_class: voltage
+      
+    - name: 'Multi Voltage L1 out'
+      unit_of_measurement: "V AC"
+      slave: 246
+      address: 15      
+      scale: 0.1
+      offset: 0
+      precision: 2
+      device_class: voltage
+      
+      #  com.victronenergy.solarcharger slave: 247
+    - name: 'Solar Yield today'
+      unit_of_measurement: "kWh"
+      slave: 247
+      address: 784
+      data_type: uint
+      scale: 0.1
+      device_class: energy
+      
+    - name: 'Solar Yield yesterday'
+      unit_of_measurement: "kWh"
+      slave: 247
+      address: 786
+      data_type: uint 
+      scale: 0.1
+      precision: 1
+      device_class: energy
+      
+    - name: "Multi Inverter State"
+      slave: 246
+      address: 31
+      # Inverter States, 0=Off;1=Low Power;2=Fault;3=Bulk;4=Absorption;5=Float;6=Storage;7=Equalize;8=Passthru;9=Inverting;10=Power assist;11=Power supply;252=Bulk protection   
+
+#Alarm Sensors
+    - name: 'Grid lost alarm'
+      slave: 246
+      address: 64
+      unit_of_measurement: "0=Ok;1=Warning"
+      
+    - name: 'Multi Temperature alarm'
+      slave: 246
+      address: 34
+      unit_of_measurement: "0=Ok;1=Warning;2=Alarm"
+      
+    - name: 'Multi Overload alarm'
+      slave: 246
+      address: 36
+      unit_of_measurement: "0=Ok;1=Warning;2=Alarm"
+
+    - name: 'CCGX Relay Boiler'
+      slave: 100
+      address: 806
+      unit_of_measurement: "1=Off;0=Heat"
+
+
+#### Binary sensors (no binary in victron) ########
+#    binary_sensors:

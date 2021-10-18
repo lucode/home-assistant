@@ -1,0 +1,9 @@
+electric_utility_tarrifs:
+  friendly_name: "Electric Tariff Prices"
+  unit_of_measurement: EUR
+  state: >
+        {% if is_state('utility_meter.monthly_el_energy', 'low') %}
+            {{ 0.08589 }}
+        {% elif is_state('utility_meter.monthly_el_energy', 'high') %}
+            {{ 0.12243 }}
+        {% endif %}

@@ -1,0 +1,46 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+
+recorder:
+  db_url: mysql://homeassistant:126dc80ff90e20d0d38ead072b816d64@core-mariadb/homeassistant?charset=utf8
+  purge_keep_days: 365
+  exclude:
+    entities:
+      - sun.sun
+      
+# Text to speech
+tts:
+  - platform: google_translate
+
+notify:
+# not included
+
+utility_meter:
+  monthly_el_energy:
+    source: sensor.multiplus_energy_from_grid
+    cycle: monthly
+    tariffs:
+      - low
+      - high
+  current_monthly_el_energy:
+    source: sensor.multiplus_energy_from_grid
+    cycle: monthly
+
+# Includes
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+variable: !include variable.yaml
+# template: !include templates.yaml
+
+# Templates / modbus conf
+modbus: !include modbus.yaml
+# Includes all Templates / Sensors in folder sensor
+sensor: !include_dir_merge_list sensor/
+binary_sensor: !include binary_sensor.yaml
+
+# MVC Ventilation
+fan: !include fans.yaml
+
