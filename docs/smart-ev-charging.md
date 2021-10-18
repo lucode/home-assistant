@@ -20,4 +20,6 @@ As it does not make sense to charge the battery in most cases to 100% it is desi
 
 So Smart Scheduled Charging is a combination of Sheduled Charging plus Charging up to a certain setpoint in %. In my case I want to charge my battery to 80% overnight. But you need to adjust some paramters to do this.
 
+![image.png](./assets/image.png)
+
 ![image.png](./assets/1634570539722-image.png)vi
