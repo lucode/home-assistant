@@ -1,18 +1,49 @@
-My Home-Assistant Setup
-=======================
+My Home-Assistant Setup 🚀️
+============================
 
 This Home Assistant configuration files are used mostly to control my energy mangament system.
 If you are interested in those topics it would most sense if you have a PV installation which you can control via HA and/or
-an Electric Vehicle, with a controllable plug. 
+an Electric Vehicle, with a controllable plug.
 In my case I use or have connected the following hardware connected to HA.
 
-- Heating: Mitsubishi Ecodan Heat pump with Z-Wave thermostats
+Heating: Mitsubishi Ecodan Heat pump with Z-Wave thermostats
+------------------------------------------------------------
 
-- Solar / PV: Victron Energy Multiplus connected via modbus
-- EV Charging: Plug with contactor controlled over Z-Wave
-- Ventilation: Controlled over Z-Wave relais
+plus Shelly EM (Energy Meter) for power consumption tracking
 
-## used HACS apps
+![image.png](./assets/image.png)
+
+Solar / PV: Victron Energy Multiplus connected via modbus
+---------------------------------------------------------
+
+ESS means Energy Storage System and does allow the control of the battery usage.
+
+![image.png](./assets/1634569048209-image.png)
+
+More Infos: [See more](docs/victron-pv-soc-control.md)
+
+Smart EV Charging: Plug with contactor controlled over Z-Wave
+-------------------------------------------------------------
+
+plus Shelly EM (Energy Meter) for power consumption tracking. The system allows to track a virtual State of Charge
+
+of the car battery and so an optimal charge management.
+
+![image.png](./assets/1634569192981-image.png)
+
+More Infos: [See more](docs/smart-ev-charging.md)
+
+Ventilation: Controlled over Z-Wave relais
+------------------------------------------
+
+## Used Software Components
+
+- Node-red (for almost all the automations)
+- Mitsubishi Melsec integration (to control the Heat Pump)
+- HA Energy Dashboard
+
+## Used HACS apps
+
 - bar-card
 - fan-control-entity-row
 - lovelace-multiple-entity-row
@@ -20,3 +51,11 @@ In my case I use or have connected the following hardware connected to HA.
 - mini-graph-card
 - scheduler-card
 - simple-thermostat
+
+---
+
+DISCLAIMER
+----------
+
+***This setup  can be used in your projects by you own risk. Or you can just take some inspiration from it.
+The Node-Red automations (flows) are relative complex and all this is still a work in progress and my have still some edges and bugs.***

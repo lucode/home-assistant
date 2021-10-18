@@ -1,23 +1,14 @@
-Smart-ev-charging 🎉️
-======================
+Victron multiplus ESS SOC control 🎉️
+======================================
 
-The EV Charging allow you to charge the EV Battery at home according your needs and with minimum power from the grid.
+The Victron Inverter with ESS allows to control the minimal State Of Charge (SOC). This means if the minimal SOC is higher than
+the actual SOC the battery gets charged ofer the grid. I use this to charge my battery over-night with the cheaper night tariff.
 
-The Charging has 4 modes:
+By using the Forecast.Solar integration I adjust the desired minimum SOC by the expected tomorrow solar yield.
 
-- Manual
-- Solar (Charges if the Solar Battery SOC reaches a certain level)
-- Schedule (Allows eg. charging at night with a lower grid tariff)
-- Solar&Schedule (Combination of Solar&Scheduled charging)
+The Charging has 2 modes:
 
-![image.png](./assets/1634570488369-image.png)
+- Weather forecast (set)
+- Weather forecast & Night charge (Combination of forecast & Night charging)
 
-Smart Scheduled Charging
-------------------------
-
-Smart Scheduled Charging allows to charge your car battery to a certain desired SOC over night in using a power meter like a Shelly EM.
-As it does not make sense to charge the battery in most cases to 100% it is desirable to charge up to 80%, which allows still to charge the next day with solar. And anyway car batteries stay healthier if you don't charge it to 100%.
-
-So Smart Scheduled Charging is a combination of Sheduled Charging plus Charging up to a certain setpoint in %. In my case I want to charge my battery to 80% overnight. But you need to adjust some paramters to do this.
-
-![image.png](./assets/1634570539722-image.png)
+![image.png](./assets/1634572276974-image.png)
