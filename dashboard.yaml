@@ -1,0 +1,564 @@
+title: Le Vernet hassio
+views:
+  - path: default_view
+    title: Home
+    badges:
+      - entity: binary_sensor.updater
+      - entity: binary_sensor.rpi_power_status
+      - entity: binary_sensor.snapshots_stale
+      - entity: person.lucas
+      - entity: sensor.le_vernet_rain_chance
+      - entity: sensor.le_vernet_snow_chance
+      - entity: sensor.le_vernet_next_rain
+      - entity: sensor.le_vernet_uv
+      - entity: sensor.09_weather_alert
+      - entity: sensor.le_vernet_daily_precipitation
+      - entity: sensor.le_vernet_cloud_cover
+      - entity: sensor.hacs
+      - entity: sensor.snapshot_backup
+      - entity: sun.sun
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:bar-card
+            entities:
+              - entity: sensor.multiplus_power_from_grid
+                severity:
+                  - color: Red
+                    from: 1001
+                    to: 7000
+                  - color: Orange
+                    from: 500
+                    to: 1000
+                  - color: Green
+                    from: 0
+                    to: 499
+              - entity: sensor.multiplus_ac_loads
+              - entity: sensor.multiplus_critical_loads
+            icon: hass:gauge
+            direction: up
+            title: Victron Multiplus
+            columns: '3'
+            decimal: '0'
+            min: '1'
+            max: '5000'
+            height: 200px
+          - type: horizontal-stack
+            cards:
+              - type: custom:bar-card
+                entities:
+                  - entity: sensor.multiplus_solar_power
+                direction: up
+                max: '4000'
+                height: 200px
+                icon: hass:weather-sunny
+                severity:
+                  - color: Orange
+                    from: 0
+                    to: 200
+                  - color: LightBlue
+                    from: 201
+                    to: 1000
+                  - color: Green
+                    from: 1001
+                    to: 5000
+              - type: custom:bar-card
+                entities:
+                  - entity: sensor.battery_state_of_charge
+                direction: up
+                icon: hass:battery
+                severity:
+                  - color: Red
+                    from: 0
+                    to: 25
+                  - color: Orange
+                    from: 26
+                    to: 50
+                  - color: Green
+                    from: 51
+                    to: 100
+      - type: entities
+        entities:
+          - entity: climate.tstat_bureau
+          - entity: climate.tstat_sal_de_bain
+          - entity: climate.tstat_salon_entree
+          - entity: climate.tstat_salon_fenetre
+          - entity: climate.tstat_salon_terrasse
+          - entity: sensor.date_time_iso
+        title: Chauffage Thermostats
+      - type: entities
+        title: VMC Ventilation
+        show_header_toggle: false
+        entities:
+          - entity: fan.vmc_ventilation_fan
+            type: custom:fan-control-entity-row
+            name: MVC Fan speed
+            isTwoSpeedFan: true
+          - entity: input_select.vmc_ventilation_mode
+          - entity: switch.double_relais_grenier_vmc_1
+          - entity: switch.double_relais_grenier_vmc_2
+          - entity: input_number.vmc_temperature_diff_out_inside_trigger
+      - type: vertical-stack
+        cards:
+          - type: weather-forecast
+            entity: weather.le_vernet
+          - type: logbook
+            entities:
+              - switch.schedule_scheduler_temp_bureau
+              - switch.schedule_scheduler_temp_sal_de_bain
+              - switch.schedule_scheduler_temp_salon_2_rad
+            hours_to_show: 24
+            title: Logging
+      - type: custom:simple-thermostat
+        entity: climate.thermostat_ventilation
+        header:
+          icon: mdi:fan
+        step_size: '1'
+        control:
+          hvac:
+            'off':
+              name: Vent on
+              icon: mdi:fan
+            dry:
+              name: 'Off'
+              icon: mdi:power
+            auto:
+              name: Heat/Cool
+              icon: mdi:temp
+        layout:
+          mode:
+            names: true
+            icons: true
+            headings: false
+      - type: entities
+        entities:
+          - entity: switch.double_switch_wc_light
+        title: Lumiére
+        state_color: true
+  - title: Chauffage
+    path: z-wave
+    icon: hass:fire
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: thermostat
+                entity: climate.tstat_sal_de_bain
+              - type: thermostat
+                entity: climate.tstat_chambre_3
+          - type: horizontal-stack
+            cards:
+              - type: thermostat
+                entity: climate.tstat_bureau
+          - type: custom:scheduler-card
+            id: scheduler_clim1
+            include:
+              - climate
+            discover_existing: false
+        title: Thermostat Chambres
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: thermostat
+                entity: climate.tstat_salon_entree
+              - type: thermostat
+                entity: climate.tstat_salon_fenetre
+          - type: horizontal-stack
+            cards:
+              - type: thermostat
+                entity: climate.tstat_salon_terrasse
+          - type: custom:scheduler-card
+            id: scheduler_clim1
+            discover_existing: false
+            include:
+              - climate
+        title: Thermostat Salon
+      - type: vertical-stack
+        cards:
+          - type: custom:simple-thermostat
+            entity: climate.ecodan_zone_1
+          - type: glance
+            entities:
+              - entity: sensor.ecodan_zone_1_flow_return_temperature
+              - entity: sensor.ecodan_zone_1_flow_temperature
+              - entity: sensor.ecodan_outside_temperature
+          - type: custom:simple-thermostat
+            entity: water_heater.ecodan
+            header:
+              name: Water heater
+      - type: entities
+        entities:
+          - entity: sensor.tstat_salon_entree_battery_level
+          - entity: sensor.tstat_salon_terrasse_battery_level
+          - entity: sensor.tstat_salon_fenetre_battery_level
+          - entity: sensor.tstat_bureau_battery_level
+          - entity: sensor.tstat_chambre_3_battery_level
+          - entity: sensor.tstat_sal_de_bain_battery_level
+        title: Batterie Level
+        state_color: true
+      - type: custom:scheduler-card
+        title: VMC Scheduler
+        discover_existing: false
+        include:
+          - input_boolean
+  - title: Victron Energy
+    path: victron-energy
+    icon: hass:weather-sunny
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: gauge
+            min: 0
+            max: 8000
+            entity: sensor.multiplus_grid_power
+            severity:
+              green: 0
+              yellow: 5000
+              red: 8000
+            needle: true
+          - type: gauge
+            entity: sensor.multiplus_ac_loads
+            min: 0
+            max: 9000
+            severity:
+              green: 0
+              yellow: 7000
+              red: 8000
+            needle: true
+          - type: custom:bar-card
+            entities:
+              - entity: sensor.shelly_em_channel_1_power
+                icon: hass:car
+              - entity: sensor.shelly_em_channel_2_power
+                icon: hass:fire
+              - entity: sensor.shelly_em_victron_ac_loads
+            direction: right
+            icon: hass:gauge
+            positions:
+              value: inside
+              minmax: 'off'
+            min: '0'
+            decimal: '1'
+            color: green
+            max: '3700'
+            severity:
+              - from: '0'
+                to: '2000'
+                color: lightgreen
+              - from: '2001'
+                to: '3700'
+                color: orange
+          - type: gauge
+            min: 0
+            max: 8000
+            entity: sensor.multiplus_critical_loads
+            severity:
+              green: 0
+              yellow: 4000
+              red: 5000
+            needle: true
+        title: Inverter Multiplus
+      - type: vertical-stack
+        cards:
+          - type: gauge
+            min: 0
+            max: 5000
+            entity: sensor.multiplus_solar_power
+            severity:
+              green: 3000
+              yellow: 500
+              red: 0
+            needle: true
+          - type: gauge
+            min: 0
+            max: 100
+            entity: sensor.solar_yield_today
+          - type: gauge
+            min: 0
+            max: 100
+            entity: sensor.solar_yield_yesterday
+          - type: entities
+            entities:
+              - entity: sensor.ac_consumption_l1
+                type: custom:multiple-entity-row
+                name: Multiplus Inverter
+                icon: hass:gauge
+                show_state: false
+                secondary_info:
+                  name: P
+                  entity: sensor.ac_consumption_l1
+                state_color: true
+                entities:
+                  - entity: sensor.grid_voltage_l1_in
+                  - entity: sensor.multi_voltage_l1_out
+                  - entity: sensor.ac_consumption_l1
+            title: Voltage
+        title: Solar Charger / Grid Voltage
+      - type: vertical-stack
+        cards:
+          - type: gauge
+            min: 0
+            max: 100
+            entity: sensor.battery_state_of_charge
+            needle: true
+            severity:
+              green: 60
+              yellow: 20
+              red: 0
+          - type: entities
+            entities:
+              - entity: sensor.battery_soc_stats
+          - type: gauge
+            min: -100
+            max: 99
+            entity: sensor.battery_current
+            severity:
+              green: 0
+              yellow: -50
+              red: -100
+            needle: true
+        title: Battery Pylontech
+      - type: vertical-stack
+        cards:
+          - type: history-graph
+            entities:
+              - entity: input_number.victron_battery_soc_treshold_ev_charging
+              - entity: sensor.battery_state_of_charge
+              - entity: switch.binary_power_switch_cabinet_s1_plug_carport
+              - entity: sensor.ess_minimum_soc_setpoint
+            hours_to_show: 24
+            refresh_interval: 10
+          - type: entities
+            entities:
+              - entity: input_select.ev_charging_mode
+              - entity: binary_sensor.ev_charging_onoff_2kw
+              - entity: binary_sensor.ev_charging_onoff_3_5kw
+              - entity: input_number.victron_battery_soc_treshold_ev_charging
+            title: EV Charging Mode
+          - type: custom:scheduler-card
+            include:
+              - input_boolean.ev_charging_scheduled_onoff
+        title: Battery & EV Charging
+      - type: entities
+        entities:
+          - entity: sensor.multiplus_inverter_state
+            type: custom:multiple-entity-row
+            name: Multiplus Inverter
+            icon: hass:weather-sunny
+            show_state: false
+            secondary_info:
+              name: S
+              entity: sensor.multiplus_inverter_state
+            state_color: true
+            entities:
+              - entity: sensor.multiplus_temperature_alarm
+              - entity: sensor.multiplus_overload_alarm
+              - entity: sensor.multiplus_grid_lost_alarm
+          - entity: sensor.multiplus_boiler_heating
+      - type: entities
+        entities:
+          - entity: sensor.ess_minimum_soc_setpoint
+          - entity: input_number.multiplus_minimal_soc_setpoint
+          - entity: input_select.victron_soc_control
+          - entity: sensor.energy_production_tomorrow
+          - entity: input_number.victron_soc_etimated_value
+        title: Setpoints
+  - title: EV Charging
+    path: ev-charging
+    icon: hass:car
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: history-graph
+            entities:
+              - entity: switch.binary_power_switch_cabinet_s1_plug_carport
+              - entity: binary_sensor.ev_charging_onoff
+              - entity: sensor.ev_battery_plug_energy_today_percent
+              - entity: input_number.ev_battery_estimated_soc
+              - entity: input_number.ev_battery_soc_setpoint
+            hours_to_show: 24
+            refresh_interval: 10
+          - type: entities
+            entities:
+              - entity: sensor.ev_battery_plug_energy_today
+                type: custom:multiple-entity-row
+                name: Charged Today
+                icon: hass:gauge
+                show_state: false
+                secondary_info:
+                  name: SOC
+                  entity: sensor.ev_battery_plug_energy_today_percent
+                state_color: true
+                entities:
+                  - entity: sensor.ev_battery_plug_energy_today
+                  - entity: sensor.ev_battery_plug_energy_yesterday_and_night
+            title: Energy Charged
+          - type: history-graph
+            entities:
+              - entity: input_number.victron_battery_soc_treshold_ev_charging
+              - entity: sensor.battery_state_of_charge
+              - entity: sensor.ess_minimum_soc_setpoint
+            hours_to_show: 24
+            refresh_interval: 10
+            title: Victron Battery
+          - type: entities
+            entities:
+              - entity: sensor.shelly_em_channel_1_energy
+              - entity: variable.ev_battery_plug_energy_state_yesterday
+              - entity: variable.ev_battery_plug_energy_state_today
+            title: Helpers
+        title: Battery & EV Charging
+      - type: vertical-stack
+        cards:
+          - type: gauge
+            entity: input_number.ev_battery_estimated_soc
+            min: 0
+            max: 100
+            needle: true
+            severity:
+              green: 50
+              yellow: 25
+              red: 2
+          - type: entities
+            entities:
+              - entity: sensor.ev_battery_plug_energy_today
+                type: custom:multiple-entity-row
+                name: Sheduled
+                icon: hass:car
+                show_state: false
+                secondary_info:
+                  name: on/off
+                  entity: input_boolean.ev_charging_scheduled_onoff
+                state_color: true
+                entities:
+                  - entity: binary_sensor.ev_charging_onoff_2kw
+                  - entity: binary_sensor.ev_charging_onoff_3_5kw
+            title: Charging
+          - type: entities
+            entities:
+              - entity: input_select.ev_charging_mode
+            title: EV Charging Mode
+          - type: sensor
+            graph: line
+            entity: sensor.shelly_em_channel_1_power
+          - type: entities
+            entities:
+              - entity: input_number.ev_charging_daily_average_use
+              - entity: input_number.ev_battery_estimated_soc
+              - entity: input_number.ev_battery_soc_setpoint
+              - entity: input_number.ev_battery_size
+              - entity: input_number.ev_charging_scheduled_charge_limit
+            title: EV Options
+          - type: custom:scheduler-card
+            include:
+              - input_boolean.ev_charging_scheduled_onoff
+  - title: Victron Charts
+    path: victron-charts
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Solar Installation 24h
+            entities:
+              - sensor.multiplus_solar_power
+              - sensor.multiplus_grid_power
+              - sensor.multiplus_ac_loads
+            icon: hass:weather-sunny
+            height: 200
+            line_width: 2
+            align_state: center
+            show:
+              fill: true
+              labels: true
+              extrema: true
+            hours_to_show: 24
+            points_per_hour: 10
+          - type: custom:mini-graph-card
+            entities:
+              - sensor.multiplus_battery_soc
+            icon: hass:battery
+            align_icon: right
+            align_state: center
+            show:
+              fill: true
+              labels: true
+            extrema: true
+            hours_to_show: 24
+            points_per_hour: 10
+      - type: vertical-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Solar Installation 4 days
+            entities:
+              - sensor.multiplus_solar_power
+              - sensor.multiplus_grid_power
+              - sensor.multiplus_ac_loads
+            icon: hass:power
+            height: 200
+            line_width: 2
+            align_icon: right
+            align_state: center
+            show:
+              fill: true
+              labels: true
+              extrema: true
+            hours_to_show: 96
+          - type: custom:mini-graph-card
+            entities:
+              - sensor.multiplus_battery_soc
+            icon: hass:battery
+            align_icon: right
+            align_state: center
+            show:
+              fill: true
+              labels: true
+            extrema: true
+            hours_to_show: 96
+      - type: history-graph
+        entities:
+          - entity: sensor.grid_voltage_l1_in
+          - entity: sensor.multi_voltage_l1_out
+        hours_to_show: 48
+        refresh_interval: 3
+        title: Grid Voltage
+      - type: entities
+        entities:
+          - entity: sensor.multiplus_solar_power
+          - entity: sensor.multiplus_grid_power
+          - entity: sensor.multiplus_ac_loads
+          - entity: sensor.grid_voltage_l1_in
+          - entity: sensor.multi_voltage_l1_out
+        title: Victron Energy Easy Solar 5000
+  - title: Office
+    path: office
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: button
+            tap_action:
+              action: toggle
+            name: Bureau Occupé
+            show_state: true
+            entity: input_boolean.bureau_occupe
+          - type: entities
+            entities:
+              - entity: climate.tstat_bureau
+              - entity: sensor.brother_mfc_l2750dw_series
+            title: Bureau Infos
+      - type: entities
+        entities:
+          - sensor.brother_mfc_l2750dw_series
+      - type: entities
+        entities:
+          - sensor.mfc_l2750dw_black_toner_remaining
+          - sensor.mfc_l2750dw_drum_remaining_life
+          - sensor.mfc_l2750dw_duplex_unit_pages_counter
+          - sensor.mfc_l2750dw_page_counter
+          - sensor.mfc_l2750dw_status
