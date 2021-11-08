@@ -1,0 +1,110 @@
+# Templates Heating calc get overall temp demand fir Ecodan
+- platform: template
+  sensors:
+    thermostat_target_temperature:
+      friendly_name: "Target Temperature"
+      unit_of_measurement: '°C'
+      value_template: "{{ states('climate.tstat_salon_entree.attributes.hvac_mode') }}"
+
+    thermostat_air_temperature:
+      friendly_name: "Air Temperature"
+      unit_of_measurement: '°C'
+      value_template: "{{(states('sensor.tstat_salon_entree_air_temperature'))}}"
+      device_class: temperature
+      
+    thermostat_state:
+      friendly_name: "Termostat hvac_mode state"
+      value_template: "{{ state_attr('climate.tstat_salon_entree', 'hvac_mode') }}"
+    thermostat_hvac_state:
+      friendly_name: "Termostat hvac_mode state2"
+      value_template: "{{ states('climate.tstat_salon_entree') }}"
+      
+    tstat_diff_office:
+      friendly_name: 'Tstat diff Office'
+      value_template: >-
+        {% if ((states('climate.tstat_bureau') != "heat")) %}
+           0
+        {% elif ((state_attr('climate.tstat_bureau', 'temperature')| float - states('sensor.tstat_bureau_air_temperature') | float) < 1) %}
+           0
+        {% else %}
+           {{state_attr('climate.tstat_bureau', 'temperature')| float - states('sensor.tstat_bureau_air_temperature') | float + 1}}
+        {% endif %}
+      unit_of_measurement: '°C'
+      device_class: temperature
+      
+    tstat_diff_sal_de_bain:
+      friendly_name: 'Tstat diff sal de bain'
+      value_template: >-
+        {% if ((states('climate.tstat_sal_de_bain') != "heat")) %}
+           0
+        {% elif ((state_attr('climate.tstat_sal_de_bain', 'temperature')| float - states('sensor.tstat_sal_de_bain_air_temperature') | float) < 1) %}
+           0
+        {% else %}
+           {{state_attr('climate.tstat_sal_de_bain', 'temperature')| float - states('sensor.tstat_sal_de_bain_air_temperature') | float + 1}}
+        {% endif %}
+      unit_of_measurement: '°C'
+      device_class: temperature 
+      
+    tstat_diff_chambre_3:
+      friendly_name: 'Tstat diff chambre 3'
+      value_template: >-
+        {% if ((states('climate.tstat_chambre_3') != "heat")) %}
+           0
+        {% elif ((state_attr('climate.tstat_chambre_3', 'temperature')| float - states('sensor.tstat_chambre_3_air_temperature') | float) < 1) %}
+           0
+        {% else %}
+           {{state_attr('climate.tstat_chambre_3', 'temperature')| float - states('sensor.tstat_chambre_3_air_temperature') | float + 1}}
+        {% endif %}
+      unit_of_measurement: '°C'
+      device_class: temperature      
+      
+      
+    tstat_diff_salon1:
+      friendly_name: 'Tstat diff Salon1'
+      value_template: >-
+        {% if ((states('climate.tstat_salon_entree') != "heat")) %}
+           0
+        {% elif ((state_attr('climate.tstat_salon_entree', 'temperature')| float - states('sensor.tstat_salon_entree_air_temperature') | float) < 1) %}
+           0
+        {% else %}
+           {{state_attr('climate.tstat_salon_entree', 'temperature')| float - states('sensor.tstat_salon_entree_air_temperature') | float + 1}}
+        {% endif %}
+      unit_of_measurement: '°C'
+      device_class: temperature
+      
+    tstat_diff_salon2:
+      friendly_name: 'Tstat diff Salon2'
+      value_template: >-
+        {% if ((states('climate.tstat_salon_fenetre') != "heat")) %}
+           0
+        {% elif ((state_attr('climate.tstat_salon_fenetre', 'temperature')| float - states('sensor.tstat_salon_fenetre_air_temperature') | float) < 1) %}
+           0
+        {% else %}
+           {{state_attr('climate.tstat_salon_fenetre', 'temperature')| float - states('sensor.tstat_salon_fenetre_air_temperature') | float + 1}}
+        {% endif %}
+      unit_of_measurement: '°C'
+      device_class: temperature
+    tstat_diff_salon3:
+      friendly_name: 'Tstat diff Salon3'
+      value_template: >-
+        {% if ((states('climate.tstat_salon_fenetre') != "heat")) %}
+           0
+        {% elif ((state_attr('climate.tstat_salon_terrasse_', 'temperature')| float - states('sensor.tstat_salon_terrasse__air_temperature') | float) < 1) %}
+           0
+        {% else %}
+           {{state_attr('climate.tstat_salon_terrasse_', 'temperature')| float - states('sensor.tstat_salon_terrasse__air_temperature') | float + 1}}
+        {% endif %}
+      unit_of_measurement: '°C'
+      device_class: temperature
+      
+    tstat_target_temp_need_house:
+      friendly_name: 'Tstat Target Temp need House'
+      value_template: "{{ states('sensor.tstat_diff_office') | float + states('sensor.tstat_diff_sal_de_bain') | float + states('sensor.tstat_diff_chambre_3') | float}}"
+      unit_of_measurement: '°C'
+      device_class: temperature
+      
+    tstat_target_temp_need_salon:
+      friendly_name: 'Tstat Target Temp need Salon'
+      value_template: "{{ states('sensor.tstat_diff_salon1') | float + states('sensor.tstat_diff_salon2') | float + states('sensor.tstat_diff_salon3') | float}}"
+      unit_of_measurement: '°C'
+      device_class: temperature
