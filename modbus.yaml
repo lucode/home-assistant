@@ -7,11 +7,13 @@
     type: tcp
     host: 192.168.1.7
     port: 502
+# REMARK: scan_interval: <5 can couse troubles
     sensors:
     - name: 'AC Consumption L1'
       unit_of_measurement: "W"
       slave: 100
       address: 817
+      data_type: uint16
       scan_interval: 2
       device_class: power
       
@@ -19,6 +21,7 @@
       unit_of_measurement: "W"
       slave: 100
       address: 820
+      data_type: uint16
       scan_interval: 2
       device_class: power
       
@@ -26,11 +29,12 @@
       unit_of_measurement: "W"
       slave: 100
       address: 850
+      data_type: uint16
       device_class: power
       
     - name: 'ESS Minimum SoC setpoint'
       unit_of_measurement: "%"
-      data_type: uint
+      data_type: uint16
       slave: 100
       address: 2901
       scan_interval: 3
@@ -38,9 +42,9 @@
       
     - name: 'Maximum System Grid Feed In'
       unit_of_measurement: "W"
-      data_type: int
+      data_type: uint16
       slave: 100
-      address: 2700
+      address: 2706
       device_class: power
       # command_on: 4000
       # command_off: 40
@@ -50,6 +54,7 @@
       unit_of_measurement: "A DC"
       slave: 100
       address: 841
+      data_type: int16
       scale: 0.1
       precision: 0
       device_class: current
@@ -58,6 +63,7 @@
       unit_of_measurement: "W"
       slave: 100
       address: 842
+      data_type: int16
       scale: 1.0
       precision: 0
       device_class: power
@@ -66,6 +72,7 @@
       unit_of_measurement: "W"
       slave: 100
       address: 860
+      data_type: int16
       scale: 10.0
       precision: 0
       device_class: power
@@ -74,6 +81,7 @@
       unit_of_measurement: "%"
       slave: 100
       address: 843
+      data_type: uint16
       scale: 1
       precision: 0
 
@@ -83,6 +91,7 @@
       unit_of_measurement: "A DC"
       slave: 225
       address: 261
+      data_type: int16
       scale: 0.1
       precision: 0
       device_class: current
@@ -91,6 +100,7 @@
       unit_of_measurement: "%"
       slave: 225
       address: 266
+      data_type: int16
       scale: 0.1
       precision: 0
 
@@ -100,6 +110,7 @@
       unit_of_measurement: "W"
       slave: 246
       address: 23
+      data_type: int16
       scan_interval: 2
       scale: 10.0
       precision: 0
@@ -109,6 +120,7 @@
       unit_of_measurement: "V AC"
       slave: 246
       address: 3
+      data_type: uint16
       scale: 0.1
       offset: 0
       precision: 2
@@ -118,6 +130,7 @@
       unit_of_measurement: "V AC"
       slave: 246
       address: 15      
+      data_type: uint16
       scale: 0.1
       offset: 0
       precision: 2
@@ -128,7 +141,7 @@
       unit_of_measurement: "kWh"
       slave: 247
       address: 784
-      data_type: uint
+      data_type: uint16
       scale: 0.1
       device_class: energy
       
@@ -136,7 +149,7 @@
       unit_of_measurement: "kWh"
       slave: 247
       address: 786
-      data_type: uint 
+      data_type: uint16 
       scale: 0.1
       precision: 1
       device_class: energy
@@ -144,27 +157,32 @@
     - name: "Multi Inverter State"
       slave: 246
       address: 31
+      data_type: uint16
       # Inverter States, 0=Off;1=Low Power;2=Fault;3=Bulk;4=Absorption;5=Float;6=Storage;7=Equalize;8=Passthru;9=Inverting;10=Power assist;11=Power supply;252=Bulk protection   
 
 #Alarm Sensors
     - name: 'Grid lost alarm'
       slave: 246
       address: 64
+      data_type: uint16
       unit_of_measurement: "0=Ok;1=Warning"
       
     - name: 'Multi Temperature alarm'
       slave: 246
       address: 34
+      data_type: uint16
       unit_of_measurement: "0=Ok;1=Warning;2=Alarm"
       
     - name: 'Multi Overload alarm'
       slave: 246
       address: 36
+      data_type: uint16
       unit_of_measurement: "0=Ok;1=Warning;2=Alarm"
 
     - name: 'CCGX Relay Boiler'
       slave: 100
       address: 806
+      data_type: uint16
       unit_of_measurement: "1=Off;0=Heat"
 
 

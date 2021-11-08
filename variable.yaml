@@ -5,7 +5,14 @@ victron_solar_yield_yest:
       friendly_name: 'Victron solar yield yesterday'
       icon: mdi:sun
       unit_of_measurement: "kWh"
-      
+victron_consumed_energy_yest:
+    value: 0
+    attributes:
+      friendly_name: 'Victron consumed energy yesterday'
+      icon: mdi:chart-histogram
+      unit_of_measurement: "kWh"
+    restore: true
+    
 ev_battery_plug_energy_state_yesterday:
     value: 0
     attributes:

@@ -11,7 +11,9 @@ Heating: Mitsubishi Ecodan Heat pump with Z-Wave thermostats
 
 plus Shelly EM (Energy Meter) for power consumption tracking
 
-![image.png](./assets/image.png)
+![image.png](./assets/heating-image.png)
+
+More Infos: [See more](docs/heating-control.md)
 
 Solar / PV: Victron Energy Multiplus connected via modbus
 ---------------------------------------------------------

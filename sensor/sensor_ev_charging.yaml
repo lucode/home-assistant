@@ -39,7 +39,7 @@
           {% if ((states('sensor.shelly_em_channel_1_energy') | float  - states('variable.ev_battery_plug_energy_state_today') | float) <= 0) %}
             0
           {% else %}
-            {{(states('sensor.shelly_em_channel_1_energy') | float  - states('variable.ev_battery_plug_energy_state_today') | float| round(1))}}
+            {{((states('sensor.shelly_em_channel_1_energy') | float  - states('variable.ev_battery_plug_energy_state_today') | float) | round(1))}}
           {% endif %}
       unit_of_measurement: "kWh"
     ev_battery_plug_energy_today_percent:

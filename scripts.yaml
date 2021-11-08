@@ -59,3 +59,13 @@ ev_charger_store_daily_energy_yesterday:
 
         '
   mode: single
+victron_store_consumed_energy_yesterday:
+  alias: Victron Store Consumed Energy yesterday
+  sequence:
+  - service: variable.set_variable
+    data:
+      variable: victron_consumed_energy_yest
+      value: '{{states.sensor.consumed_energy_multiplus_daily.state}}
+
+        '
+  mode: single
