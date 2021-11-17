@@ -10,48 +10,50 @@
       friendly_name: "Imported Power Yearly kWh"
       device_class: energy
       unit_of_measurement: 'kWh'
-      value_template: "{{(states('sensor.multiplus_grid_power') | float) / 1000}}"  
+      value_template: "{{(states('sensor.multiplus_grid_power') | int(default=0)) / 1000}}"  
     solar_power_yearly_kwh:
       friendly_name: "Solar Power Yearly kWh"
       device_class: energy
       unit_of_measurement: 'kWh'
-      value_template: "{{(states('sensor.multiplus_solar_power') | float) / 1000}}"
+      value_template: "{{(states('sensor.multiplus_solar_power') | int(default=0)) / 1000}}"
       
     shelly_em_victron_ac_loads:
       friendly_name: 'AC loads, Oven / Microwave / Dryer etc.'
       value_template: >-
-          {% if ((states('sensor.multiplus_ac_loads') | int - states('sensor.shelly_em_channel_1_power') | float - states('sensor.shelly_em_channel_2_power') | float)  <= 0) %}
+          {% if ((states('sensor.multiplus_ac_loads')| int(default=0) - states('sensor.shelly_em_channel_1_power')| int(default=0) - states('sensor.shelly_em_channel_2_power')| int(default=0))  <= 0) %}
             0
           {% else %}
-            {{(states('sensor.multiplus_ac_loads') | int - states('sensor.shelly_em_channel_1_power') | float - states('sensor.shelly_em_channel_2_power') | float| round(1))}}
+            {{(states('sensor.multiplus_ac_loads')| int(default=0) - states('sensor.shelly_em_channel_1_power')| int(default=0) - states('sensor.shelly_em_channel_2_power')| int(default=0))| int(default=0)}}
           {% endif %}
       unit_of_measurement: "W"
       device_class: power
-      
     ev_battery_plug_energy_yesterday_and_night:
       friendly_name: 'EV Battery plug Energy Charged yesterday'
-      value_template: "{{(states('variable.ev_battery_plug_energy_state_today') | float  - states('variable.ev_battery_plug_energy_state_yesterday') | float) | round(1)}}"
+      value_template: "{{(states('variable.ev_battery_plug_energy_state_today') | int(default=0)  - states('variable.ev_battery_plug_energy_state_yesterday') | int(default=0)) }}"
       unit_of_measurement: "kWh"
       
     ev_battery_plug_energy_today:
       friendly_name: 'EV Battery plug Energy Charged today'
       value_template: >-
-          {% if ((states('sensor.shelly_em_channel_1_energy') | float  - states('variable.ev_battery_plug_energy_state_today') | float) <= 0) %}
+          {% if ((states('sensor.shelly_em_channel_1_energy') | int(default=0)  - states('variable.ev_battery_plug_energy_state_today') | int(default=0)) <= 0) %}
             0
           {% else %}
-            {{((states('sensor.shelly_em_channel_1_energy') | float  - states('variable.ev_battery_plug_energy_state_today') | float) | round(1))}}
+            {{(states('sensor.shelly_em_channel_1_energy') | int(default=0)  - states('variable.ev_battery_plug_energy_state_today') | int(default=0))}}
           {% endif %}
       unit_of_measurement: "kWh"
+      
+      
     ev_battery_plug_energy_today_percent:
       friendly_name: 'EV Battery plug % Charged today'
       value_template: >-
-          {% if ((states('sensor.ev_battery_plug_energy_today') | float) / (states('input_number.ev_battery_size') | float / 100)  | round(1) <= 0) %}
+          {% if ((states('sensor.ev_battery_plug_energy_today') | float(default=0)) / (states('input_number.ev_battery_size') | float(default=0) / 100)   <= 0) %}
             0
           {% else %}
-            {{(states('sensor.ev_battery_plug_energy_today') | float) / (states('input_number.ev_battery_size') | float / 100)  | round(1)}}
+            {{(states('sensor.ev_battery_plug_energy_today') | float(default=0)) / (states('input_number.ev_battery_size') | float(default=0) / 100) | round(1)}}
           {% endif %}
       unit_of_measurement: "%"
+      
     ev_battery_new_soc_estim_percent:
       friendly_name: 'EV Battery new State of Charge'
-      value_template: "{{(states('sensor.ev_battery_plug_energy_today_percent') | float) + (states('input_number.ev_battery_estimated_soc') | float )}}"
+      value_template: "{{(states('sensor.ev_battery_plug_energy_today_percent') | int(default=0)) + (states('input_number.ev_battery_estimated_soc') | int(default=0) )}}"
       unit_of_measurement: "%"

@@ -9,10 +9,10 @@
           service: script.vmc_fan_on
         turn_off:
           service: script.vmc_fan_off
-        set_preset_mode:
-          service: script.vmc_set_preset_mode
-          data:
-            preset_mode: "{{ preset_mode }}"
+#        set_preset_mode:
+#          service: script.vmc_set_preset_mode
+#          data:
+#            preset_mode: "{{ preset_mode }}"
         speed_count: 3
         preset_modes:
           - off
