@@ -45,19 +45,6 @@
       unit_of_measurement: '°C'
       device_class: temperature 
       
-    tstat_diff_chambre_1:
-      friendly_name: 'Tstat diff chambre 1'
-      value_template: >-
-        {% if ((states('climate.tstat_chambre_1') != "heat")) %}
-           0
-        {% elif ((state_attr('climate.tstat_chambre_1', 'temperature')| float - states('sensor.tstat_chambre_1_air_temperature') | float) <= 0) %}
-           0
-        {% else %}
-           {{state_attr('climate.tstat_chambre_1', 'temperature')| float - states('sensor.tstat_chambre_1_air_temperature') | float}}
-        {% endif %}
-      unit_of_measurement: '°C'
-      device_class: temperature    
-    
     tstat_diff_chambre_3:
       friendly_name: 'Tstat diff chambre 3'
       value_template: >-
@@ -97,16 +84,15 @@
         {% endif %}
       unit_of_measurement: '°C'
       device_class: temperature
-      
     tstat_diff_salon3:
       friendly_name: 'Tstat diff Salon3'
       value_template: >-
         {% if ((states('climate.tstat_salon_terrasse') != "heat")) %}
            0
-        {% elif ((state_attr('climate.tstat_salon_terrasse', 'temperature')| float - states('sensor.tstat_salon_terrasse_air_temperature') | float) <= 0) %}
+        {% elif ((state_attr('climate.tstat_salon_terrasse', 'temperature')| float - states('sensor.tstat_salon_terrasse__air_temperature') | float) <= 0) %}
            0
         {% else %}
-           {{state_attr('climate.tstat_salon_terrasse', 'temperature')| float - states('sensor.tstat_salon_terrasse_air_temperature') | float}}
+           {{state_attr('climate.tstat_salon_terrasse', 'temperature')| float - states('sensor.tstat_salon_terrasse__air_temperature') | float}}
         {% endif %}
       unit_of_measurement: '°C'
       device_class: temperature
