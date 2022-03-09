@@ -1,5 +1,9 @@
 # cat modbus.yaml
 # configuration entry for a TCP connection
+# com.victronenergy.grid    slave: 30
+# com.victronenergy.system  slave: 100
+# com.victronenergy.battery slave: 225
+
 # system :
  -  name: victron
     retry_on_empty: true
@@ -7,23 +11,44 @@
     type: tcp
     host: 192.168.1.7
     port: 502
-# REMARK: scan_interval: <5 can couse troubles
+# REMARK: scan_interval: <5 can cause troubles
     sensors:
     - name: 'AC Consumption L1'
       unit_of_measurement: "W"
       slave: 100
       address: 817
       data_type: uint16
-      scan_interval: 2
+      scan_interval: 3
       device_class: power
       
     - name: 'Multiplus Grid power'
       unit_of_measurement: "W"
       slave: 100
       address: 820
-      data_type: uint16
-      scan_interval: 2
+      data_type: int16
+      scan_interval: 3
       device_class: power
+      
+    - name: 'Multiplus Energy from Grid'
+      unit_of_measurement: "kWh"
+      slave: 30
+      address: 2603
+      data_type: uint16
+      scale: 0.01
+      precision: 1
+      scan_interval: 20
+      device_class: energy
+      state_class: total_increasing
+    - name: 'Multiplus Energy to Grid'
+      unit_of_measurement: "kWh"
+      slave: 30
+      address: 2606
+      data_type: uint16
+      scale: 0.01
+      precision: 1
+      scan_interval: 20
+      device_class: energy
+      state_class: total_increasing
       
     - name: 'Multiplus Solar power'
       unit_of_measurement: "W"
@@ -37,7 +62,7 @@
       data_type: uint16
       slave: 100
       address: 2901
-      scan_interval: 3
+      scan_interval: 5
       scale: 0.1
       
     - name: 'Maximum System Grid Feed In'
@@ -45,6 +70,7 @@
       data_type: uint16
       slave: 100
       address: 2706
+      scale: 0.01
       device_class: power
       # command_on: 4000
       # command_off: 40
