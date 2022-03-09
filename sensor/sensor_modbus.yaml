@@ -16,7 +16,7 @@
       friendly_name: 'Multiplus Minimal SOC setpoint scaled'
       value_template: "{{ states('input_number.multiplus_minimal_soc_setpoint') | int(default=0) * 10 | int(default=0) }}"
       unit_of_measurement: "%"
-
+      
     multiplus_power_from_grid:
       friendly_name: 'Multiplus Power from Grid'
       value_template: >-
@@ -24,17 +24,6 @@
             0
           {% else %}
             {{(states('sensor.multiplus_grid_power') | int(default=0))}}
-          {% endif %}
-      unit_of_measurement: "W"
-      device_class: power
-      
-    multiplus_power_to_grid:
-      friendly_name: 'Multiplus Power to Grid'
-      value_template: >-
-          {% if ((states('sensor.multiplus_grid_power') | int(default=0))  > 0) %}
-            0
-          {% else %}
-            {{(states('sensor.multiplus_grid_power') | int(default=0) - states('sensor.multiplus_grid_power') | int(default=0) - states('sensor.multiplus_grid_power') | int(default=0) )}}
           {% endif %}
       unit_of_measurement: "W"
       device_class: power
@@ -137,20 +126,6 @@
   name: 'Battery SOC stats'
 
 # Statistics for Energy Dashboard kWh
-- platform: integration
-  source: sensor.multiplus_power_from_grid
-  name: "Multiplus Energy from Grid"
-  unit_prefix: k
-#  unit_time: d
-  round: 2
-  
-- platform: integration
-  source: sensor.multiplus_power_to_grid
-  name: "Multiplus Energy to Grid"
-  unit_prefix: k
-#  unit_time: d
-  round: 2
-
 - platform: integration
   source: sensor.multiplus_power_from_battery
   name: "Multiplus Energy from Battery"
