@@ -19,6 +19,21 @@ The automation has 3 modes:
 The target temp house and salon are sensor templates that add all the Delta T (Diff Air Temp / Target temp) in two values.
 In the flow function I add those values together and calculate a decent target temp for the Ecodan Heat Pump.
 
+    tstat_diff_office:
+      friendly_name: 'Tstat diff Office'
+      value_template: >-
+        {% if ((states('climate.tstat_bureau') != "heat")) %}
+           0
+        {% elif ((state_attr('climate.tstat_bureau', 'temperature')| float - states('sensor.tstat_bureau_air_temperature') | float) <= 0) %}
+           0
+        {% else %}
+           {{state_attr('climate.tstat_bureau', 'temperature')| float - states('sensor.tstat_bureau_air_temperature') | float}}
+        {% endif %}
+      unit_of_measurement: '°C'
+      device_class: temperature
+      
+see: sensor/sensor_heating.yaml 
+
 As you can see that works quite well, so for instance during the night my Heat Pump goes to idle because the Thermostats aren't demand any heat.
 
 ![image.png](./assets/1636369995222-image.png)
