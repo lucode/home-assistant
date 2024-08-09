@@ -25,5 +25,6 @@ As you can see that works quite well, so for instance during the night my Heat P
 
 (Please ignore the curves from 13:00 to 16:00 this is a mechanical problem.)
 
-A solution without individual thermostats you can be found here:
+A solution without individual thermostats can be found here:
+
 https://seanblanchfield.com/2022/02/automating-heating-with-home-assistant
