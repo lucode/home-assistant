@@ -1,7 +1,7 @@
 Heating (Heat Pump) control 🎉️
 ================================
 
-This automation requires that your Heat Pump can be controlled by HA. In my case I have only one Room Thermostat in the living room of the
+This automation requires that your Heat Pump can be controlled by HA. In my case I have only one Room Thermostat in the living room which is connected by the
 Heat Pump, which is not an ideal setup. In the case, I need more heating power in the bathroom and the living room is already warm, the valve in the bathroom opens, but the flow temp is too low to heat the bathroom. 
 So everything depends on the Ecodan Thermostat in the living room and unless I can control the setpoint of this temperature sensor I can't heat the bathroom or any other enough. 
 
