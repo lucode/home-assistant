@@ -1,9 +1,9 @@
 Heating (Heat Pump) control 🎉️
 ================================
 
-This automation requires that your Heat Pump can be controlled by HA. In my case I have only one Room Thermostats of the
-Heat Pump, which is not an ideal setup because if I need more heating power (eg. in the bathroom), if the room where the
-Ecodan unit is located is warm enough, I can't heat the bathroom. the Schdeuler of the Thermostats aren't deman
+This automation requires that your Heat Pump can be controlled by HA. In my case I have only one Room Thermostat in the living room of the
+Heat Pump, which is not an ideal setup. In the case, I need more heating power in the bathroom and the living room is already warm, the valve in the bathroom opens, but the flow temp is too low to heat the bathroom. 
+So everything depends on the Ecodan Thermostat in the living room and unless I can control the setpoint of this temperature sensor I can't heat the bathroom or any other enough. 
 
 So this flow sets the Mitsubishi Ecodan Target temperature according to the demand temp from all the Thermostats in relation
 to the room temp. Or it can be set by a scheduler.
