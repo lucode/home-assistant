@@ -25,6 +25,12 @@ As you can see that works quite well, so for instance during the night my Heat P
 
 (Please ignore the curves from 13:00 to 16:00 this is a mechanical problem.)
 
+Other solutions:
+
+As there are others having the same problem there are other solutions to this problem:
+
+https://medium.com/@pvginkel/controlling-room-temperature-with-home-assistant-8b524601c402
+
 A solution without individual thermostats can be found here:
 
 https://seanblanchfield.com/2022/02/automating-heating-with-home-assistant
